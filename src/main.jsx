@@ -16,43 +16,23 @@ import Arrivals from './components/Arrivals/Arrivals.jsx'
 import Contact from './components/Contact/Contact.jsx'
 
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Layout/>,
-    children: [
-      {
-        path: '',
-        element: <Home/>
-      },
-      {
-        path: 'shop',
-        element: <Shop/>
-      },
-      {
-        path: 'Arrivals',
-        element: <Arrivals/>
-      },
-      {
-        path: 'Contact',
-        element: <Contact/>
-      },
-      {
-        path: 'AddToCart',
-        element: <AddToCart/>
-      },
-      {
-        path: 'WishList',
-        element: <WishList/>
-      }
-    ]
-  }
-])
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Provider store={store}>
-    <RouterProvider router={router}/>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/Arrivals" element={<Arrivals />} />
+          <Route path="/Contact" element={<Contact />} />
+          <Route path="/AddToCart" element={<AddToCart />} />
+          <Route path="/WishList" element={<WishList />} />
+        </Routes>
+      </Layout>
+    </Router>
+  </Provider>
+</React.StrictMode>
 )
