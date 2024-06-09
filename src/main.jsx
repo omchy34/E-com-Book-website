@@ -18,7 +18,7 @@ import Contact from './components/Contact/Contact.jsx'
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/E-com-Book-website/',
     element: <Layout/>,
     children: [
       {
