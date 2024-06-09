@@ -45,9 +45,9 @@ const Navbar = () => {
           <ul className='flex gap-10 pt-7 text-xl cursor-pointer' id={show ? 'flex' : 'hidden'} >
 
             <li><NavLink to="/" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`} >Home</NavLink></li>
-            <li><NavLink to="/Shop" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`} >Shop</NavLink></li>
-            <li><NavLink to="/arrivals" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`} >Arrivals</NavLink></li>
-            <li><NavLink to="/contact" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`} >Contact</NavLink></li>
+            <li><NavLink to="/shop" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`} >Shop</NavLink></li>
+            <li><NavLink to="/Arrivals" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`} >Arrivals</NavLink></li>
+            <li><NavLink to="/Contact" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`} >Contact</NavLink></li>
           </ul>
         </nav>
         <nav className="anotherAction flex gap-5 pt-7 text-xl cursor-pointer">
