@@ -22,11 +22,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-            <Route path="shop" element={<Shop />} />
-            <Route path="Arrivals" element={<Arrivals />} />
-            <Route path="Contact" element={<Contact />} />
-            <Route path="AddToCart" element={<AddToCart />} />
-            <Route path="WishList" element={<WishList />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/Arrivals" element={<Arrivals />} />
+            <Route path="/Contact" element={<Contact />} />
+            <Route path="/AddToCart" element={<AddToCart />} />
+            <Route path="/WishList" element={<WishList />} />
           </Route>
         </Routes>
       </Router>
