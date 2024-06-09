@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://omchy34.github.io/E-com-Book-website",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
