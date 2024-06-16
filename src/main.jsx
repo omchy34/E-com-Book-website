@@ -14,6 +14,7 @@ import WishList from './components/Wishlist/WishList.jsx'
 import AddToCart from './components/Checkout/AddToCart.jsx'
 import Arrivals from './components/Arrivals/Arrivals.jsx'
 import Contact from './components/Contact/Contact.jsx'
+import Registration from './components/LoginRej/Registration.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -27,6 +28,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="/Contact" element={<Contact />} />
             <Route path="/AddToCart" element={<AddToCart />} />
             <Route path="/WishList" element={<WishList />} />
+            <Route path="/Registration" element={<Registration />} />
           </Route>
         </Routes>
       </Router>
