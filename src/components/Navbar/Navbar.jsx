@@ -44,7 +44,7 @@ const Navbar = () => {
         />
         <div className="h-screen pt-32 pl-60" id="searchArea">
           <form action="#">
-            <input type="text" placeholder="Search..." /> &nbsp; &nbsp;&nbsp;
+            <input type="text" placeholder="Search..." id="text" /> &nbsp; &nbsp;&nbsp;
             <input
               type="submit"
               value="Search"

@@ -20,7 +20,7 @@
   background: rgba(10, 10, 10, 0.7);
 }
 
-input[type=text] {
+#text {
   width: 70%;
   caret-color: beige;
   color: #FDF2F8;
@@ -50,7 +50,7 @@ input[type=text] {
     width: 100vw !important;
   }
 
-  input[type=text] {
+  #text {
     width: 70%;
     caret-color: beige;
     color: #FDF2F8;
