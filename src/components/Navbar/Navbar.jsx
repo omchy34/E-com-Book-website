@@ -145,17 +145,17 @@ const Navbar = () => {
                 >
                   <div className="p-3">
                     <NavLink
-                      className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
+                      className="block rounded-lg py-2 px-3 transition hover:bg-white/50"
                       to="/Registration"
                     >
                       <p className="font-semibold text-black">Registration</p>
                     </NavLink>
-                    <a
-                      className="block rounded-lg py-2 px-3 transition hover:bg-white/5"
-                      href="#"
+                    <NavLink
+                      className="block rounded-lg py-2 px-3 transition hover:bg-white/50"
+                      to="/Login"
                     >
                       <p className="font-semibold text-black">Login</p>
-                    </a>
+                    </NavLink>
                   </div>
                 </PopoverPanel>
               </Transition>

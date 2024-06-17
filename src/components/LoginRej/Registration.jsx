@@ -7,6 +7,18 @@ const Registration = () => {
         <h2 className="text-3xl font-bold text-center text-pink-600 mb-8">Create Account</h2>
         <form>
           <div className="mb-6">
+            <label className="block text-pink-600 text-sm font-medium mb-2" htmlFor="fullName">
+              Full Name
+            </label>
+            <input
+              className="shadow-sm appearance-none border border-gray-300 rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+              id="fullName"
+              name='fullName'
+              type="text"
+              placeholder="Enter your FullName"
+            />
+          </div>
+          <div className="mb-6">
             <label className="block text-pink-600 text-sm font-medium mb-2" htmlFor="username">
               Username
             </label>
@@ -28,6 +40,17 @@ const Registration = () => {
               type="email"
               name='email'
               placeholder="Enter your email"
+            />
+          </div>
+          <div className="mb-6">
+            <label className="block text-pink-600 text-sm font-medium mb-2" htmlFor="email">
+              Select Your Profile pic
+            </label>
+            <input
+              className="shadow-sm appearance-none border border-gray-300 rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+              id="avatar"
+              type="file"
+              name='avatar'
             />
           </div>
           <div className="mb-6">
