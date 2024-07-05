@@ -4,22 +4,22 @@ import { useDispatch } from "react-redux";
 import { Addwishlist, Removewishlist } from "../../features/wishlistCard/wishlistSlice";
 import { AddInCart } from "../../features/AddToCart/AddToCartSlice";
 
-const Card = ({ book, isInWishlist , IsInCart }) => {
+const Card = ({ Product, isInWishlist }) => {
   const dispatch = useDispatch();
 
   const handleWish = () => {
     if (isInWishlist) {
-      dispatch(Removewishlist({ id: book.id }));
+      dispatch(Removewishlist({ id: Product.id }));
     } else {
-      dispatch(Addwishlist(book));
+      dispatch(Addwishlist(Product));
     }
   };
 
   function handleCart() {
     if (IsInCart) {
-      dispatch(RemoveFromCart({ id: book.id }));
+      dispatch(RemoveFromCart({ id: Product.id }));
     } else {
-      dispatch(AddInCart(book));
+      dispatch(AddInCart(Product));
     }
   }
 
@@ -27,14 +27,14 @@ const Card = ({ book, isInWishlist , IsInCart }) => {
     <div className="border" id="main">
       <div className="images">
         <img
-          src="https://rukminim2.flixcart.com/image/612/612/xif0q/book/w/b/2/pw-calculus-core-fear-no-more-calculus-book-by-sachin-jakhar-for-original-imagymm9sduc9kgp.jpeg?q=70"
+          src={Product.ProductImg}
           alt="Product img"
         />
       </div>
       <div className="details">
-        <div className="price pt-2 text-xl">₹54</div>
+        <div className="price pt-2 text-xl">₹{Product.ProductPrice}</div>
         <div className="title pt-2 hover:text-slate-400 ">
-          <a href="#">{book.title}</a>
+          <a href="#">{Product.ProductName}</a>
         </div>
         <div className="AddToCart flex gap-10">
           <div className="Cart pt-2">

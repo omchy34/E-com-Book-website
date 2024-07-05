@@ -10,6 +10,7 @@ export default {
         poppins: ['Poppins', 'sans-serif'],
       },
       colors: {
+        clifford: "#da373d",
         pink: {
           100: '#ffebef',
           500: '#ff69b4',

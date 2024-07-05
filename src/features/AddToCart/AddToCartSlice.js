@@ -1,11 +1,18 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  items: [],
+  items: [
+    {
+      ProductId : "",
+      ProductName: "",
+      ProductPrice : 0,
+      ProductImg : '',
+    },
+  ],
 };
 
 export const AddToCartSlice = createSlice({
-  name: 'addtocart',
+  name: "addtocart",
   initialState,
   reducers: {
     AddInCart: (state, action) => {

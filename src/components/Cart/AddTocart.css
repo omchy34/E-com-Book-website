@@ -1,0 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap");
+body {
+  font-family: "Poppins", sans-serif;
+}
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+#colorChange{
+  color: rgb(65, 16, 36);
+  background: url('https://images.pexels.com/photos/3532540/pexels-photo-3532540.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') no-repeat center center fixed;
+
+}
