@@ -1,22 +1,38 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [formData, setformData] = useState({
+    email: "",
+    password: "",
+  });
+
+  function handleSubmit(){
+    e.preventDefault();
+  }
+
+  function handleChange(e){
+    const {name , vlaue} = e.target;
+  }
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-pink-300 via-pink-300 to-blue-400 p-4">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-xl transition-transform transform hover:scale-105">
         <h2 className="text-3xl font-extrabold text-center text-pink-700">
           Sign in to your account
         </h2>
-        <form className="mt-8 space-y-6">
+        <form className="mt-8 space-y-6" onClick={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="email-address" className="sr-only">
-                Email address
+                Email address or UserName
               </label>
               <input
                 id="email-address"
                 name="email"
                 type="email"
+                value={formData.email}
+                onChange={handleChange}
                 autoComplete="email"
                 required
                 className="relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-pink-500 focus:border-pink-500 focus:z-10 sm:text-sm transition-colors duration-200 ease-in-out"
@@ -30,7 +46,9 @@ const Login = () => {
               <input
                 id="password"
                 name="password"
+                onChange={handleChange}
                 type="password"
+                value={formData.password}
                 autoComplete="current-password"
                 required
                 className="relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-pink-500 focus:border-pink-500 focus:z-10 sm:text-sm transition-colors duration-200 ease-in-out"
