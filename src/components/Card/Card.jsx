@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Addwishlist, Removewishlist } from "../../features/wishlistCard/wishlistSlice";
 import { AddInCart } from "../../features/AddToCart/AddToCartSlice";
 
-const Card = ({ Product, isInWishlist }) => {
+const Card = ({ Product, isInWishlist , IsInCart }) => {
   const dispatch = useDispatch();
 
   const handleWish = () => {
