@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "../Card/Card";
 import { FaShippingFast } from "react-icons/fa";
 import { BiSupport } from "react-icons/bi";
@@ -13,8 +13,7 @@ import { Link } from "react-router-dom";
 import "swiper/css";
 import Review from "../Review/Review";
 
-const Home = () => { 
-  const Product = [{ Productid: 1, ProductName: "reducer" , ProductPrice : 20 , ProductImg : "../../assets/sampleOfbook.jpg" }];
+const Home = () => {
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const AddtoCartItems = useSelector((state) => state.addtocart.items);
 
@@ -65,11 +64,11 @@ const Home = () => {
         <div className="popularBooks pt-20">
           <p className="pop text-center text-3xl">Popular Books</p>
           <div className="cards gap-5 pt-20 flex flex-wrap">
-            {Product.map((Product) => {
-              const isInWishlist = wishlistItems.some((item) => item.id === Product.id);
-              const IsInCart = AddtoCartItems.some((item) => item.id === Product.id);
-              return <Card key={Product.id} Product={Product} isInWishlist={isInWishlist} IsInCart={IsInCart}/>;
-            })}
+            {/* {Product.map((Product) => {
+              const isInWishlist = wishlistItems.some((item) => item._id === Product._id);
+              const IsInCart = AddtoCartItems.some((item) => item._id === Product._id);
+              return <Card key={Product._id} Product={Product} isInWishlist={isInWishlist} IsInCart={IsInCart} />;
+            })} */}
           </div>
         </div>
         <div className="swiper p-10">

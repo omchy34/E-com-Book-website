@@ -17,6 +17,7 @@ const Profile = () => {
     name: "",
     userName: "",
     email: "",
+    phone: "",
     avatar: "",
   });
 
@@ -42,12 +43,14 @@ const Profile = () => {
           name: response.data.data.user.fullName,
           userName: response.data.data.user.userName,
           email: response.data.data.user.email,
+          phone: response.data.data.user.phone,
           avatar: response.data.data.user.avatar,
         });
       }
     } catch (error) {
       console.error("Error fetching data:", error);
       alert("Token not found");
+      alert("please login again")
     }
   }
 
@@ -93,7 +96,7 @@ const Profile = () => {
                         <NavLink to="#">Address</NavLink>
                       </li>
                       <li className="bg-pink-800 rounded-2xl">
-                        <NavLink to="#">Home</NavLink>
+                        <NavLink to="/OrderTracking">Orders</NavLink>
                       </li>
                     </ol>
                   </div>
@@ -101,19 +104,23 @@ const Profile = () => {
               </section>
             </div>
           </div>
-          <section className="right border bg-pink-200 h-screen w-screen">
+          <section className="right bg-pink-200 h-screen w-screen">
             {/* right */}
             <section className="all">
               <div className={showSideNav ? "burgur" : "del"}>
                 <RxHamburgerMenu className="ml-9 mt-6" onClick={HandleNav} />
               </div>
 
-              <aside className="full m-5 border h-screen">
-               <div className="flex gap-5">
-                Full Name : <input type="text" />
-                Email : <input type="text" />
-                Phone Number : <input type="text" />
-                
+              <aside className="full m-10 h-screen">
+               <div className="flex gap-5 text-xl flex-wrap flex-col">
+
+               <div className="fullname flex gap-5"><p className="text-red-600">FullName:</p> <input type="text" value={UserData.name} /></div>
+               <div className="email flex gap-5"><p className="text-red-600">Email:</p>  <input type="text" value={UserData.email}/></div>
+               <div className="UserName flex gap-5"><p className="text-red-600">UserName:</p> <input type="text" value={UserData.userName}/></div>
+               <div className="phone flex gap-5"><p className="text-red-600">Phone: </p> <input type="text" value={UserData.phone}/></div>
+               <div className="PassWord flex gap-5"><p className="text-red-600">Password: </p>underProccess</div>
+                <btn className='bg-red-600 p-1 w-24 text-center text-white cursor-pointer rounded-lg hover:bg-red-800'>Update</btn>
+
                </div>
               </aside>
 

@@ -7,6 +7,7 @@ const Registration = () => {
     fullName: "",
     userName: "",
     email: "",
+    phone:"",
     password: "",
     avatar: null,
   });
@@ -22,6 +23,7 @@ const Registration = () => {
     data.append("fullName", formData.fullName);
     data.append("userName", formData.userName);
     data.append("email", formData.email);
+    data.append("phone", formData.phone);
     data.append("password", formData.password);
     if (formData.avatar) {
       data.append("avatar", formData.avatar);
@@ -117,6 +119,20 @@ const Registration = () => {
               value={formData.email}
               name="email"
               placeholder="Enter your Email"
+            />
+          </div>
+          <div className="mb-6">
+            <label className="block text-pink-600 text-sm font-medium mb-2" htmlFor="phone">
+              Phone no.
+            </label>
+            <input
+              className="shadow-sm appearance-none border border-gray-300 rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+              id="phone"
+              type="number"
+              onChange={handleChange}
+              value={formData.phone}
+              name="phone"
+              placeholder="Enter your phone no."
             />
           </div>
           <div className="mb-6">

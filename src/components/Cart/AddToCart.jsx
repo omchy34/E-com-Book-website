@@ -1,188 +1,322 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RemoveFromCart } from "../../features/AddToCart/AddToCartSlice";
-import Card from "../Card/Card";
-import "./AddTocart.css";
+import AddToCartSlice, {
+  RemoveFromCart,
+  ClearCart,
+} from "../../features/AddToCart/AddToCartSlice";
 import { MdDeleteForever } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import _ from "lodash";
+import { useAddress } from "../../contex/AddressContex.jsx";
 
 const AddToCart = () => {
+  const { address } = useAddress();
+  const accessToken = useSelector(
+    (state) => state.AccRefToken.AccRefToken.accessToken
+  );
   const AddtoCartItems = useSelector((state) => state.addtocart.items);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  const [promo, setPromo] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [itemQuantities, setItemQuantities] = useState({});
 
-  // function handleRemove(id) {
-  //   dispatch(RemoveFromCart({ id }));
-  // }
+  useEffect(() => {
+    const initialQuantities = {};
+    AddtoCartItems.forEach((item) => {
+      initialQuantities[item._id] = 1;
+    });
+    setItemQuantities(initialQuantities);
+  }, [AddtoCartItems]);
+  
+  const updateCartQuantitiesInBackend = useCallback(
+    _.debounce(async (id, quantity) => {
+      if (accessToken) {
+        try {
+          await axios.post(
+            "http://localhost:8000/api/v1/users/AddToCart",
+            { quantity, productId: id },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+        } catch (error) {
+          console.log("Something went wrong", error);
+        }
+      }
+    }, 500),
+    [accessToken]
+  );
+
+  const handleIncrease = (id) => {
+    setItemQuantities((prevQuantities) => {
+      const updatedQuantities = {
+        ...prevQuantities,
+        [id]: (prevQuantities[id] || 1) + 1,
+      };
+      updateCartQuantitiesInBackend(id, updatedQuantities[id]);
+      return updatedQuantities;
+    });
+  };
+
+  const handleDecrease = (id) => {
+    setItemQuantities((prevQuantities) => {
+      const updatedQuantities = {
+        ...prevQuantities,
+        [id]: Math.max((prevQuantities[id] || 1) - 1, 1),
+      };
+      updateCartQuantitiesInBackend(id, updatedQuantities[id]);
+      return updatedQuantities;
+    });
+  };
+
+  const handleDeleteItem = async (id) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/users/RemoveFromCart",
+        { productId: id },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (response.data.statusCode === 200) {
+        toast.success(response.data.message);
+      }
+      dispatch(RemoveFromCart({ _id: id }));
+      setItemQuantities((prevQuantities) => {
+        const updatedQuantities = { ...prevQuantities };
+        delete updatedQuantities[id];
+        return updatedQuantities;
+      });
+    } catch (error) {
+      console.log("Something went wrong while removing the item", error);
+    }
+  };
+
+  const handlePromoChange = (e) => setPromo(e.target.value);
+
+  const handleDiscount = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(
+        "http://localhost:8000/api/v1/Admin/promoCodes"
+      );
+      const promoCode = response.data.data.find((code) => code.code === promo);
+      if (promoCode) {
+        setDiscount(promoCode.discount);
+        toast.success("Promo code applied");
+      } else {
+        toast.error("Please enter a valid promo code");
+      }
+    } catch (error) {
+      console.error("Error fetching promo codes:", error);
+    }
+  };
+  const calculateTotal = () => {
+    let total = 0;
+    AddtoCartItems.forEach((item) => {
+      const quantity = itemQuantities[item._id] || 1;
+      total += item.Price * quantity;
+    });
+    return total - (total * discount) / 100;
+  };
+
+  const handlePlaceOrder = async () => {
+    if (!address) {
+      toast.error("Please enter your address");
+      return;
+    }
+
+    try {
+      const items = AddtoCartItems.map((item) => ({
+        productId: item._id,
+        quantity: itemQuantities[item._id] || 1,
+        ProductName: item.ProductName,
+        ProductImg: item.images,  
+        address
+      }));
+      const Response = await axios.post(
+        "http://localhost:8000/api/v1/order/placeOrder",
+        {
+          items,
+          amount: calculateTotal(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        } 
+      );
+      console.log(Response);
+      if (Response.data.statusCode === 200) {
+        toast.success("Order placed successfully");
+        console.log(Response);
+        const { razorpayOrderId, amount , newOrder} = Response.data.data;
+        
+
+        const options = {
+          key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+          amount: amount * 100, // Amount in paise
+          currency: "INR",
+          name: "Your Company Name",
+          description: "Test Transaction",
+          order_id: razorpayOrderId,
+          handler: async function (response) {
+            await axios.post(
+              "http://localhost:8000/api/v1/order/verify-payment",
+              {
+                Payment_Id: response.razorpay_payment_id,
+                Order_Id: response.razorpay_order_id,
+                Signature: response.razorpay_signature,
+                newOrder
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              }
+            );
+            console.log(  "OKIe" ,response.razorpay_signature);
+            dispatch(ClearCart());
+            navigate("/OrderConfirmation");
+          },
+          theme: {
+            color: "#3399cc",
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+      } else {
+        toast.error(Response.data.message);
+      }
+    } catch (error) {
+      console.error("Error placing order:", error);
+      toast.error("Something went wrong while placing the order");
+    }
+  };
 
   return (
-    <section className="Main" id="colorChange">
-      <div className="backdrop-blur-2xl bg-white/30">
-        <main className="container mx-auto my-auto h-screen">
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            <div className="col-span-2 p-5">
-              <div className="cart flex justify-between">
-                <h2 className="text-xl font-bold text-red-700">Shoping Cart</h2>
-                <h3 className="text-xl font-bold">1 Items</h3>
-              </div>
-              <hr className="border-black-300 text-center text-2xl mt-8" />
-              <div>
-                <div className="flex justify-between items-center mt-6 pt-6">
-                  <div className="flex items-center">
+    <section className="bg-gray-100 py-12">
+      <div className="container mx-auto px-4 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+            <div className="px-6 py-4">
+              <h2 className="text-3xl font-semibold text-gray-800 mb-4">
+                Shopping Cart
+              </h2>
+              <hr />
+              {AddtoCartItems.map((item) => (
+                <div
+                  key={item._id}
+                  className="flex items-center justify-between border-b border-gray-200 py-4 hover:bg-gray-50 transition duration-300 ease-in-out"
+                >
+                  <div className="flex items-center space-x-4">
                     <img
-                      src="https://admin.regalfurniturebd.com/storage/uploads/fullsize/2020-12/csm-220-web-1.jpg"
-                      width="100"
-                      className="rounded-full"
+                      src={item.images}
+                      alt={item.ProductName}
+                      className="w-16 h-16 object-cover rounded-lg"
                     />
-                    <div className="flex flex-col ml-3">
-                      <span className="md:text-xl font-medium">Product -1</span>
-                      <span className="text-xs font-light text-gray-400">
-                        #41551
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        {item.ProductName}
+                      </h3>
+                      <p className="text-sm text-gray-500">{item._id}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2">
+                      <button
+                        className="text-lg text-gray-500 focus:outline-none"
+                        onClick={() => handleDecrease(item._id)}
+                      >
+                        -
+                      </button>
+                      <span className="text-lg font-semibold">
+                        {itemQuantities[item._id] || 1}
                       </span>
+                      <button
+                        className="text-lg text-gray-500 focus:outline-none"
+                        onClick={() => handleIncrease(item._id)}
+                      >
+                        +
+                      </button>
                     </div>
-                  </div>
-                  <div className="flex justify-center items-center">
-                    <div className="pr-8 flex">
-                      <span className="font-semibold text-3xl">-</span>
-                      <input
-                        type="text"
-                        className="focus:outline-none bg-gray-100 border h-9 w-9 rounded text-sm px-2 mx-2"
-                        value="1"
-                      />
-                      <span className="font-semibold text-3xl">+</span>
-                    </div>
-                    <div className="pr-8">
-                      <span className="text-xl font-medium">$10.50</span>
-                    </div>
-                    <div className="text-2xl">
-                      <MdDeleteForever />
-                    </div>
+                    <button
+                      className="text-red-500 hover:text-red-700 transition duration-200"
+                      onClick={() => handleDeleteItem(item._id)}
+                    >
+                      <MdDeleteForever size={24} />
+                    </button>
                   </div>
                 </div>
-                {/* <div className="flex justify-between items-center pt-6 mt-6 border-t">
-                  <div className="flex items-center">
-                    <img src="https://admin.regalfurniturebd.com/storage/uploads/fullsize/2019-05/cfv-220-7-1-66.jpg" width="60" className="rounded-full" />
-                    <div className="flex flex-col ml-3">
-                      <span className="text-md font-medium w-auto">Product -2</span>
-                      <span className="text-xs font-light text-gray-400">#66999</span>
-                      <span className="text-sm font-light text-orange-400">Categories-2</span>
-                    </div>
-                  </div>
-                  <div className="flex justify-center items-center">
-                    <div className="pr-8 flex">
-                      <span className="font-semibold">-</span>
-                      <input type="text" className="focus:outline-none bg-gray-100 border h-6 w-8 rounded text-sm px-2 mx-2" value="1" />
-                      <span className="font-semibold">+</span>
-                    </div>
-                    <div className="pr-8">
-                      <span className="text-xs font-medium">$10.50</span>
-                    </div>
-                    <div><MdDeleteForever /></div>
-                  </div>
-                </div>
-
-                <div className="flex justify-between items-center mt-6 pt-6 border-t">
-                  <div className="flex items-center">
-                    <img src="https://admin.regalfurniturebd.com/storage/uploads/fullsize/2021-03/cfc-204.jpg" width="60" className="rounded-full" />
-                    <div className="flex flex-col ml-3">
-                      <span className="text-md font-medium">Product -3</span>
-                      <span className="text-xs font-light text-gray-400">#86577</span>
-                      <span className="text-sm font-light text-orange-400">Categories-3</span>
-                    </div>
-                  </div>
-                  <div className="flex justify-center items-center">
-                    <div className="pr-8 flex">
-                      <span className="font-semibold">-</span>
-                      <input type="text" className="focus:outline-none bg-gray-100 border h-6 w-8 rounded text-sm px-2 mx-2" value="1" />
-                      <span className="font-semibold">+</span>
-                    </div>
-                    <div className="pr-8">
-                      <span className="text-xs font-medium">$10.50</span>
-                    </div>
-                    <div><MdDeleteForever /></div>
-                  </div>
-                </div> */}
-
-                <div className="flex justify-between items-center mt-6 pt-6 border-t">
-                  <div className="flex items-center">
-                    <i className="fa fa-arrow-left text-sm pr-2 text-red-800"></i>
-                    <span className="text-md font-medium text-red-800">
-                      Continue Shopping
-                    </span>
-                  </div>
-                  <div className="flex justify-center items-center">
-                    <span className="text-xl font-medium text-gray-400 mr-1">
-                      Subtotal:
-                    </span>
-                    <span className="text-lg font-bold text-gray-800">
-                      {" "}
-                      $24.90
-                    </span>
-                  </div>
-                </div>
+              ))}
+              <div className="flex justify-between items-center mt-4">
+                <h3 className="text-xl font-semibold text-gray-800">Total:</h3>
+                <p className="text-xl font-semibold text-gray-800">
+                  ₹{calculateTotal().toFixed(2)}
+                </p>
               </div>
-            </div>
-            <div className="bg-gray-100 p-5 col-span-2 sm:col-span-1">
-              <div className="checkout">
-                <h2 className="text-xl font-bold">Order Summary</h2>
-                <hr className="border-black-300 text-center text-2xl mt-8" />
-                <div className="flex justify-between mt-5 uppercase font-semibold">
-                  <span>Items 1</span>
-                  <span>$24.90</span>
-                </div>
-                <div className="mt-5">
-                  <span className="text-md font-medium uppercase">
-                    Shipping
-                  </span>
-                  <div className="mt-2">
-                    <div className="dropdown inline-block relative w-full">
-                      <select className="bg-gray-300 text-gray-700 p-2 w-full inline-flex items-center justify-between rounded">
-                        <span className="mr-1">Select delivery</span>
-                        <svg
-                          className="fill-current h-4 w-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                        </svg>
-                        <option value="selected">Cash On Delivery</option>
-                        <option value="1">Pre-payment</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div className="my-5 items-star">
-                  <span className="uppercase text-md font-medium">
-                    Promo code
-                  </span>
-                  <input
-                    type="text"
-                    className="p-2 w-full mt-2 bg-gray-300 rounded"
-                    placeholder="Enter your code"
-                  />
-                  <button className="py-2 px-6 bg-red-500 hover:bg-red-700 text-white rounded mt-3">
-                    Apply
-                  </button>
-                </div>
-                <hr className="border-black-300 text-center text-2xl mt-8" />
-                <div className="flex justify-between mt-3 font-semibold">
-                  <span className="uppercase">Total cost</span>
-                  <span>$24.90</span>
-                </div>
-                <button className="uppercase font-medium py-2 w-full bg-red-600 text-white rounded mt-8" >
-                  <Link to='/Checkout'>
-                  checkout
-                  </Link>
-                </button> 
-              </div>
+              <form
+                onSubmit={handleDiscount}
+                className="mt-6 flex items-center"
+              >
+                <input
+                  type="text"
+                  value={promo}
+                  onChange={handlePromoChange}
+                  placeholder="Enter promo code"
+                  className="border border-gray-300 rounded-lg px-4 py-2 w-full"
+                />
+                <button
+                  type="submit"
+                  className="ml-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-200"
+                >
+                  Apply
+                </button>
+              </form>
             </div>
           </div>
-        </main>
+          <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+            <div className="px-6 py-4">
+              <h2 className="text-3xl font-semibold text-gray-800 mb-4">
+                Checkout
+              </h2>
+              <hr />
+              {address ? (
+                <button
+                  onClick={handlePlaceOrder}
+                  className="block bg-red-600 text-white text-center rounded-lg py-2 mt-6 hover:bg-red-700 transition duration-200"
+                >
+                  Place Order
+                </button>
+              ) : (
+                <Link
+                  to="/AddressForm"
+                  className="block bg-red-600 text-white text-center rounded-lg py-2 mt-6 hover:bg-red-700 transition duration-200"
+                >
+                  Add Address
+                </Link>
+              )}
+              <Link
+                to="/"
+                className="block bg-gray-200 text-gray-800 text-center rounded-lg py-2 mt-4 hover:bg-gray-300 transition duration-200"
+              >
+                Continue Shopping
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
 };
 
 export default AddToCart;
-//       {AddtoCartItems.map((item) => (
-//         <Card key={item.id} book={item} handleRemove={handleRemove} IsInCart={true} />
-//       ))}

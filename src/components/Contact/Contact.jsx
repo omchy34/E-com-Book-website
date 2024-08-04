@@ -25,7 +25,7 @@ const Contact = () => {
             headers: {
               Authorization: `Bearer ${accessToken}`
             }
-          });
+          }); 
           if (data) {
             setUserData({
               name: response.data.data.user.fullName,

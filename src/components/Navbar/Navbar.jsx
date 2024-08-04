@@ -22,10 +22,6 @@ const Navbar = () => {
     setInpShow(!Inpshow);
   }
 
-  function WishList() {
-    console.log("WishList Clicked");
-  }
-
   return (
     <>
       <div className={!Inpshow ? "Input" : ""} id="searchInp">
@@ -65,7 +61,7 @@ const Navbar = () => {
             <CiShoppingCart className="hover:text-red-600" />
           </NavLink>
           <NavLink to="/WishList" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`}>
-            <FaRegHeart className="hover:text-red-600" onClick={WishList} />
+            <FaRegHeart className="hover:text-red-600"  />
           </NavLink>
           <div className="flex gap-8">
             <Popover>

@@ -1,7 +1,7 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  items: [],
+  items: JSON.parse(localStorage.getItem("WishlistItem")) || [],
 };
 
 export const wishlistSlice = createSlice({
@@ -10,14 +10,19 @@ export const wishlistSlice = createSlice({
   reducers: {
     Addwishlist: (state, action) => {
       state.items.push(action.payload);
+      localStorage.setItem("WishlistItem", JSON.stringify(state.items));
     },
     Removewishlist: (state, action) => {
-      state.items = state.items.filter((item) => item.id !== action.payload.id);
+      state.items = state.items.filter((item) => item._id !== action.payload.product_id);
+      localStorage.setItem('WishlistItem', JSON.stringify(state.items));
     },
-  },
-});
+    LoadwishList: (state, action) => {
+      state.items = action.payload;
+    }
+  }
+})
 
-export const { Addwishlist, Removewishlist } = wishlistSlice.actions;
+export const { Addwishlist, Removewishlist, LoadwishList } = wishlistSlice.actions;
 
 // Export the reducer
 export default wishlistSlice.reducer;
