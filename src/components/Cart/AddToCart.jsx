@@ -37,7 +37,7 @@ const AddToCart = () => {
       if (accessToken) {
         try {
           await axios.post(
-            "http://localhost:8000/api/v1/users/AddToCart",
+            "https://backend-1-te09.onrender.com/api/v1/users/AddToCart",
             { quantity, productId: id },
             {
               headers: {
@@ -78,7 +78,7 @@ const AddToCart = () => {
   const handleDeleteItem = async (id) => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/users/RemoveFromCart",
+        "https://backend-1-te09.onrender.com/api/v1/users/RemoveFromCart",
         { productId: id },
         {
           headers: {
@@ -106,7 +106,7 @@ const AddToCart = () => {
     e.preventDefault();
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/v1/Admin/promoCodes"
+        "https://backend-1-te09.onrender.com/api/v1/Admin/promoCodes"
       );
       const promoCode = response.data.data.find((code) => code.code === promo);
       if (promoCode) {
@@ -143,7 +143,7 @@ const AddToCart = () => {
         address
       }));
       const Response = await axios.post(
-        "http://localhost:8000/api/v1/order/placeOrder",
+        "https://backend-1-te09.onrender.com/api/v1/order/placeOrder",
         {
           items,
           amount: calculateTotal(),
@@ -170,7 +170,7 @@ const AddToCart = () => {
           order_id: razorpayOrderId,
           handler: async function (response) {
             await axios.post(
-              "http://localhost:8000/api/v1/order/verify-payment",
+              "https://backend-1-te09.onrender.com/api/v1/order/verify-payment",
               {
                 Payment_Id: response.razorpay_payment_id,
                 Order_Id: response.razorpay_order_id,

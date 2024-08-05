@@ -28,7 +28,7 @@ const Profile = () => {
   async function fetchData() {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/users/userData",
+        "https://backend-1-te09.onrender.com/api/v1/users/userData",
         {},
         {
           headers: {

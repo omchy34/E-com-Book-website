@@ -15,7 +15,7 @@ const OrderTracking = () => {
     const fetchOrders = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:8000/api/v1/order/SuccessOrder",
+          "https://backend-1-te09.onrender.com/api/v1/order/SuccessOrder",
           {},
           {
             headers: {

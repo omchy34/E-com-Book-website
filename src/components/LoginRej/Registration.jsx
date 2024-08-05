@@ -30,7 +30,7 @@ const Registration = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:8000/api/v1/users/Register", data, {
+      const response = await axios.post("https://backend-1-te09.onrender.com/api/v1/users/Register", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

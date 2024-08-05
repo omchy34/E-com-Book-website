@@ -21,7 +21,7 @@ const Contact = () => {
     if (accessToken) {
       const fetchData = async () => {
         try {
-          const response = await axios.post("http://localhost:8000/api/v1/users/userData", {}, {
+          const response = await axios.post("https://backend-1-te09.onrender.com/api/v1/users/userData", {}, {
             headers: {
               Authorization: `Bearer ${accessToken}`
             }

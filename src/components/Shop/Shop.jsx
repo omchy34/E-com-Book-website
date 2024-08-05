@@ -17,7 +17,7 @@ const Shop = () => {
   async function BookData() {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/users/Admin/ProductList"
+        "https://backend-1-te09.onrender.com/api/v1/users/Admin/ProductList"
       );
       if (response) {
         setProduct(response.data.data);
