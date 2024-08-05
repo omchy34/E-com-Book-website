@@ -11,7 +11,7 @@ import { Provider } from 'react-redux'
 import Layout from './Layout.jsx'
 import Home from './components/Home/Home.jsx'
 import Shop from './components/Shop/Shop.jsx'
-import WishList from './components/WishList/WishList.jsx'
+import WishList from './components/WishList/WishList.jsx';
 import AddToCart from './components/Cart/AddToCart.jsx'
 import Arrivals from './components/Arrivals/Arrivals.jsx'
 import Contact from './components/Contact/Contact.jsx'
