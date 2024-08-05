@@ -11,7 +11,6 @@ import { Provider } from 'react-redux'
 import Layout from './Layout.jsx'
 import Home from './components/Home/Home.jsx'
 import Shop from './components/Shop/Shop.jsx'
-import WishList from './components/WishList/WishList.jsx';
 import AddToCart from './components/Cart/AddToCart.jsx'
 import Arrivals from './components/Arrivals/Arrivals.jsx'
 import Contact from './components/Contact/Contact.jsx'
@@ -25,6 +24,7 @@ import AddressForm from './components/Cart/AddressForm.jsx';
 import OrderConfirmation from './components/orderconfirmation/OrderConfirmation.jsx';
 import { AddressProvider } from './contex/AddressContex.jsx';
 import OrderTracking from './components/OrderTrack/OrderTrack.jsx';
+import WishList from './components/WishList/WishList.jsx';
 
   
 // import Logout from './components/Logout/Logout.jsx'
@@ -46,7 +46,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               <Route path="/OrderConfirmation" element={<OrderConfirmation />} />
               <Route path="/OrderTracking" element={<OrderTracking />} />
               <Route path="/AddressForm" element={<AddressForm />} />
-              <Route path="/WishList" element={<WishList />} />
+              <Route path='/WishList' element={<WishList/>} />
               <Route path="/Registration" element={<Registration />} />
               <Route path="/Login" element={<Login />} />
               <Route path="/Logout" element={<Logout />} />
