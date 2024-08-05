@@ -9,8 +9,8 @@ const WishList = () => {
   const dispatch = useDispatch();
 
   function handleRemove(productId) {
-    dispatch(Removewishlist({ product_id: productId }));
-    console.log(productId);
+    // dispatch(Removewishlist({ product_id: productId }));
+    // console.log(productId);
     
     if(localStorage.getItem("accessToken")) {
       const accessToken = localStorage.getItem("accessToken");
