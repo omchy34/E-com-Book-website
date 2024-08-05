@@ -8,7 +8,7 @@ const WishList = () => {
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const dispatch = useDispatch();
 
-  function handleRemove(productId) {
+  function handleRemove() {
     // dispatch(Removewishlist({ product_id: productId }));
     // console.log(productId);
     
@@ -21,6 +21,8 @@ const WishList = () => {
       }
     }
   }
+
+  handleRemove()
 
   return (
     <section className="Main">
