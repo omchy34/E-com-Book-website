@@ -1,0 +1,1 @@
+import{j as e}from"./vendor-DZSY-1uI.js";const r=()=>e.jsx("section",{className:"Main",children:e.jsx("h1",{className:"text-center text-red-500 text-2xl pt-5",children:"New Arrivals"})});export{r as default};
