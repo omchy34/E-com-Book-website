@@ -23,7 +23,7 @@ const ProductPage = React.lazy(() => import('./components/ProductPage/ProductPag
 const AddressForm = React.lazy(() => import('./components/Cart/AddressForm.jsx'));
 const OrderConfirmation = React.lazy(() => import('./components/orderconfirmation/OrderConfirmation.jsx'));
 const OrderTracking = React.lazy(() => import('./components/OrderTrack/OrderTrack.jsx'));
-const WishList = React.lazy(() => import('./components/WishList/WishList.jsx'));
+const WishList = React.lazy(() => import('./components/Wishlist/WishList.jsx'));
 
 // Fallback component
 const Loading = () => <div>Loading...</div>;

@@ -13,9 +13,11 @@ const Login = () => {
     identifier: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false); // Loading state
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true); // Start loading animation
 
     try {
       const response = await axios.post('https://backend-1-te09.onrender.com/api/v1/users/Login', formData, {
@@ -52,6 +54,8 @@ const Login = () => {
         toast.error("An unexpected error occurred");
       }
       console.log(error);
+    } finally {
+      setLoading(false); // Stop loading animation
     }
   }
 
@@ -132,7 +136,30 @@ const Login = () => {
               type="submit"
               className="relative flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-pink-600 border border-transparent rounded-md hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-transform transform hover:scale-105"
             >
-              Sign in
+              {loading ? (
+                <svg
+                  className="w-5 h-5 text-white animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v2a6 6 0 00-6 6h-2zm12 0a6 6 0 00-6-6V4a8 8 0 018 8h-2z"
+                  ></path>
+                </svg>
+              ) : (
+                "Sign in"
+              )}
             </button>
           </div>
         </form>

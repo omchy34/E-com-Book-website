@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -13,11 +15,13 @@ const Registration = () => {
   });
   const [fileError, setFileError] = useState("");
   const [formError, setFormError] = useState("");
+  const [loading, setLoading] = useState(false); // Add loading state
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
     setFormError("");
+    setLoading(true); // Set loading to true
 
     const data = new FormData();
     data.append("fullName", formData.fullName);
@@ -37,18 +41,20 @@ const Registration = () => {
       });
 
       if (response.status === 201) {
-        alert("User registered successfully.");
+        toast.success("User registered successfully.");
         navigate("/login");
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        alert("User with email or username already exists.");
+        toast.error("User with email or username already exists.");
       } else if (error.response) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       } else {
         console.error("There was an error registering the user!", error);
-        alert("An unexpected error occurred. Please try again.");
+        toast.error("An unexpected error occurred. Please try again.");
       }
+    } finally {
+      setLoading(false); // Set loading to false after request
     }
   }
 
@@ -164,10 +170,34 @@ const Registration = () => {
           </div>
           <div className="flex items-center justify-center">
             <button
-              className="bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-6 rounded focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+              className="relative bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-6 rounded focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
               type="submit"
+              disabled={loading} // Disable button when loading
             >
-              Register
+              {loading ? (
+                <svg
+                className="w-5 h-5 text-white animate-spin"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v2a6 6 0 00-6 6h-2zm12 0a6 6 0 00-6-6V4a8 8 0 018 8h-2z"
+                ></path>
+              </svg>
+              ) : (
+                "Register"
+              )}
             </button>
           </div>
         </form>
