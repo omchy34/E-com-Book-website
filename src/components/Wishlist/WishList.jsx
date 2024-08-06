@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { LoadwishList } from "../../features/wishlistCard/wishlistSlice.js";
+import { setToken } from "../../features/AccRefToken/AccRefTokenSlice.js";
 import Card from "../Card/Card";
 import './WishList.css';
 
