@@ -1,0 +1,1 @@
+import{v as e,s as o,r as a,j as n,t as u}from"./vendor-B3t4vCyg.js";import{d as c}from"./index-D5QuZvto.js";const g=()=>{const s=e(),t=o();return a.useEffect(()=>{(async()=>{u.success("You have been logged out"),t(c()),s("/")})()},[t,s]),n.jsx("div",{children:"Logout"})};export{g as default};
