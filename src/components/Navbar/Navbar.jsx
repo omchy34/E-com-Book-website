@@ -12,18 +12,40 @@ import { Popover, PopoverButton, PopoverPanel, Transition } from "@headlessui/re
 const Navbar = () => {
   const [show, setShow] = useState(false);
   const [Inpshow, setInpShow] = useState(false);
+  const [sideNavVisible, setSideNavVisible] = useState(false);
   const accessToken = useSelector(state => state.AccRefToken.AccRefToken.accessToken);
-
-  function handleToggle() {
-    setShow(!show);
-  }
 
   function handleClick() {
     setInpShow(!Inpshow);
   }
 
+  function toggleSideNav() {
+    setSideNavVisible(!sideNavVisible);
+  }
+
   return (
     <>
+      {/* Side Navigation */}
+      <div className={`fixed top-0 right-0 h-full bg-black text-white transform ${sideNavVisible ? "translate-x-0" : "translate-x-full"} transition-transform duration-300 w-64 z-40`}>
+        <div className="p-4">
+          <GiCrossMark className="text-2xl cursor-pointer" onClick={toggleSideNav} />
+        </div>
+        <ul className="flex flex-col gap-6 p-4">
+          <li>
+            <NavLink to="/" onClick={toggleSideNav} className={({ isActive }) => `${isActive ? "text-red-500" : "text-white hover:text-orange-500"}`}>Home</NavLink>
+          </li>
+          <li>
+            <NavLink to="/shop" onClick={toggleSideNav} className={({ isActive }) => `${isActive ? "text-red-500" : "text-white hover:text-orange-500"}`}>Shop</NavLink>
+          </li>
+          <li>
+            <NavLink to="/Arrivals" onClick={toggleSideNav} className={({ isActive }) => `${isActive ? "text-red-500" : "text-white hover:text-orange-500"}`}>Arrivals</NavLink>
+          </li>
+          <li>
+            <NavLink to="/Contact" onClick={toggleSideNav} className={({ isActive }) => `${isActive ? "text-red-500" : "text-white hover:text-orange-500"}`}>Contact</NavLink>
+          </li>
+        </ul>
+      </div>
+
       <div className={!Inpshow ? "Input" : ""} id="searchInp">
         <GiCrossMark className="absolute right-32 top-10 cursor-pointer" id="cross" onClick={handleClick} />
         <div className="h-screen pt-32 pl-60" id="searchArea">
@@ -39,9 +61,11 @@ const Navbar = () => {
             <img src={Logo} alt="Logo" className="h-20 md:w-60" />
           </a>
         </nav>
-        <nav className="nav-links">
-          
-          <ul className={`flex gap-10 pt-7 text-xl cursor-pointer  `} id={show ? "flex" : "hidden"}>
+
+
+        {/* navlinks */}
+        <nav className="nav-links z-50 hidden md:flex">
+          <ul className={`flex gap-10 pt-7 text-xl cursor-pointer m-auto justify-center place-items-center`}>
             <li>
               <NavLink to="/" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`}>Home</NavLink>
             </li>
@@ -55,16 +79,15 @@ const Navbar = () => {
               <NavLink to="/Contact" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`}>Contact</NavLink>
             </li>
           </ul>
- 
-
         </nav>
+
         <nav className="anotherAction flex gap-5 pt-7 text-xl cursor-pointer">
           <CiSearch className="hover:text-red-600" onClick={handleClick} />
           <NavLink to="/AddToCart" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`}>
             <CiShoppingCart className="hover:text-red-600" />
           </NavLink>
           <NavLink to="/WishList" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`}>
-            <FaRegHeart className="hover:text-red-600"  />
+            <FaRegHeart className="hover:text-red-600" />
           </NavLink>
           <div className="flex gap-8">
             <Popover>
@@ -103,11 +126,11 @@ const Navbar = () => {
               </Transition>
             </Popover>
           </div>
+        {/* Mobile Menu Button */}
+        <button className="flex md:hidden" onClick={toggleSideNav}>
+          <CiMenuBurger className="text-2xl" />
+        </button>
 
-          {/* hamburgur */}
-          <p onClick={handleToggle}>
-            {show ? <GiCrossMark /> : <CiMenuBurger className="nav-btn" onClick={handleToggle} />}
-          </p>
         </nav>
       </nav>
     </>

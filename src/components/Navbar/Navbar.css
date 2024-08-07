@@ -8,9 +8,6 @@
   background: #FDF2F8;
 }
 
-.nav-btn {
-  display: none;
-}
 
 .Input {
   display: none;
@@ -38,20 +35,10 @@
     object-fit: cover;
     mix-blend-mode: darken;
   }
-  #flex {
-    display: flex;
-    flex-direction: column;
-    margin-right: -149px;
-    margin-top: 45px;
-  }
-
-  .nav-btn {
-    display: block;
-  }
-
-  #hidden {
-    display: none;
-  }
+  
+#nav-links{
+  display: none !important ;
+}
 
   .main {
     width: 100vw !important;
