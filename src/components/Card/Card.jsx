@@ -60,7 +60,7 @@ const Card = ({ product, isInWishlist }) => {
       <div className="details">
         <div className="price pt-2 text-xl">₹{product.Price}</div>
         <div className="title pt-2 hover:text-slate-400">
-          <Link to="/productPage">{product.productName}</Link>
+        <Link to={`/productPage/${product._id}`}>  {product.ProductName} </Link>
         </div>
         <div className="AddToCart flex gap-10">
           <div className="Cart pt-2">

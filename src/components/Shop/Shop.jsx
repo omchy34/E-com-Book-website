@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from '../../features/AccRefToken/AccRefTokenSlice.js'; // update this path
 import { SetCart } from "../../features/AddToCart/AddToCartSlice.js";
 import { LoadwishList } from "../../features/wishlistCard/wishlistSlice.js";
-// import "./shop.css"; // Ensure the CSS file is included
 
 const Shop = () => {
   const [Product, setProduct] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
   const wishlistItems = useSelector((state) => state.wishlist.items);
   const AddtoCartItems = useSelector((state) => state.addtocart.items);
   const dispatch = useDispatch();
@@ -28,6 +28,8 @@ const Shop = () => {
     } catch (error) {
       toast.error("Internal fetching error");
       console.log("500", error);
+    } finally {
+      setLoading(false); // Set loading to false when data is fetched or an error occurs
     }
   }
 
@@ -52,6 +54,40 @@ const Shop = () => {
     loadData();
   }, [dispatch]);
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <svg
+          version="1.1"
+          id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 100 100"
+          xmlSpace="preserve"
+          className="w-16 h-16 animate-spin"
+        >
+          <path
+            fill="none"
+            stroke="#3498db"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeMiterlimit="10"
+            d="M50,15a35,35 0 1,0 35,35a35,35 0 1,0 -35,-35"
+          >
+            <animateTransform
+              attributeName="transform"
+              type="rotate"
+              from="0 50 50"
+              to="360 50 50"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+          </path>
+        </svg>
+      </div>
+    );
+  }
+
   return (
     <>
       <section className="Main">
@@ -62,7 +98,7 @@ const Shop = () => {
               {Product.map((product) => {
                 const isInWishlist = wishlistItems.some((item) => item._id === product._id);
                 // const IsInCart = AddtoCartItems.some((item) => item._id === product._id);
-                return <Card key={product._id} product={product} isInWishlist={isInWishlist}  />;
+                return <Card key={product._id} product={product} isInWishlist={isInWishlist} />;
               })}
             </div>
           </section>
