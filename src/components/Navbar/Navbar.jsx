@@ -40,7 +40,8 @@ const Navbar = () => {
           </a>
         </nav>
         <nav className="nav-links">
-          <ul className={`flex gap-10 pt-7 text-xl cursor-pointer`} id={show ? "flex" : "hidden"}>
+          
+          <ul className={`flex gap-10 pt-7 text-xl cursor-pointer  `} id={show ? "flex" : "hidden"}>
             <li>
               <NavLink to="/" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`}>Home</NavLink>
             </li>
@@ -54,6 +55,8 @@ const Navbar = () => {
               <NavLink to="/Contact" className={({ isActive }) => `${isActive ? "text-red-500" : "text-black-50 hover:text-orange-500"}`}>Contact</NavLink>
             </li>
           </ul>
+ 
+
         </nav>
         <nav className="anotherAction flex gap-5 pt-7 text-xl cursor-pointer">
           <CiSearch className="hover:text-red-600" onClick={handleClick} />
@@ -100,6 +103,8 @@ const Navbar = () => {
               </Transition>
             </Popover>
           </div>
+
+          {/* hamburgur */}
           <p onClick={handleToggle}>
             {show ? <GiCrossMark /> : <CiMenuBurger className="nav-btn" onClick={handleToggle} />}
           </p>
