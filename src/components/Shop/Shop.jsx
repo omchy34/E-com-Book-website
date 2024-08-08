@@ -14,12 +14,12 @@ const Shop = () => {
   const AddtoCartItems = useSelector((state) => state.addtocart.items);
   const dispatch = useDispatch();
 
-  async function BookData() {
+  const fetchProducts = async () => {
     try {
       const response = await axios.post(
         "https://backend-1-te09.onrender.com/api/v1/users/Admin/ProductList"
       );
-      if (response) {
+      if (response.data) {
         setProduct(response.data.data);
         console.log(response.data.data);
       } else {
@@ -31,11 +31,11 @@ const Shop = () => {
     } finally {
       setLoading(false); // Set loading to false when data is fetched or an error occurs
     }
-  }
+  };
 
   useEffect(() => {
-      await BookData();
-    async function loadData() {
+    const loadData = async () => {
+      await fetchProducts();
 
       if (localStorage.getItem("accessToken")) {
         const accessToken = localStorage.getItem("accessToken");
@@ -49,7 +49,7 @@ const Shop = () => {
           dispatch(SetCart(storedCart));
         }
       }
-    }
+    };
 
     loadData();
   }, [dispatch]);
