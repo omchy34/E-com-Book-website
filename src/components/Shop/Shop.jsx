@@ -34,8 +34,8 @@ const Shop = () => {
   }
 
   useEffect(() => {
-    async function loadData() {
       await BookData();
+    async function loadData() {
 
       if (localStorage.getItem("accessToken")) {
         const accessToken = localStorage.getItem("accessToken");
