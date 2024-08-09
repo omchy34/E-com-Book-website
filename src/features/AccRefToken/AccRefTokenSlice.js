@@ -6,7 +6,7 @@ const AccRefTokenSlice = createSlice({
   initialState: {
     AccRefToken: {
       accessToken: localStorage.getItem('accessToken') || null,
-      refreshToken: localStorage.getItem('refreshToken') || null,
+   
     },
   },
   reducers: {
@@ -14,12 +14,12 @@ const AccRefTokenSlice = createSlice({
       const { accessToken, refreshToken } = action.payload;
       state.AccRefToken = { accessToken, refreshToken };
       localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+    
     },
     deleteToken: (state) => {
       state.AccRefToken = { accessToken: null, refreshToken: null };
       localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+  
     },
   },
 });
