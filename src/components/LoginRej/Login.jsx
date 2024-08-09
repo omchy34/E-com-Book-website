@@ -32,8 +32,8 @@ const Login = () => {
         const accessToken = response.data.data?.accessToken;
 
         if (accessToken) {
-          dispatch(setToken({ accessToken }));
           console.log('Access Token:', accessToken);
+          dispatch(setToken({ accessToken }));
           toast.success("Login Success");
           navigate("/");
         } else {
