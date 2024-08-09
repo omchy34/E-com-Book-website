@@ -31,10 +31,9 @@ const Login = () => {
       if (response.data.success === true) {
         const { accessToken, refreshToken } = response.data.data;
 
-        if (accessToken && refreshToken) {
-          dispatch(setToken({ accessToken, refreshToken }));
+        if (accessToken) {
+          dispatch(setToken({ accessToken }));
           console.log('Access Token:', accessToken);
-          console.log('Refresh Token:', refreshToken);
           toast.success("Login Success");
           navigate("/"); // Navigate to the desired page after login
         } else {
