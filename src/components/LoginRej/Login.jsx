@@ -29,7 +29,7 @@ const Login = () => {
       console.log('API Response:', response);
 
       if (response.data.success === true) {
-        const { accessToken } = response.data.data;
+        const { accessToken } = response.data;
 
         if (accessToken) {
           dispatch(setToken({ accessToken }));
