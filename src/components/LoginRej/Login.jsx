@@ -31,19 +31,24 @@ const Login = () => {
       if (response.data.success === true) {
         const  accessToken  = response.data.data.accessToken
 
-        if (accessToken) {
-          dispatch(setToken({ accessToken }));
-          console.log('Access Token:', accessToken);
-          toast.success("Login Success");
-          navigate("/"); // Navigate to the desired page after login
-        } else {
-          console.error('Tokens not found in the response:', response.data);
-          toast.error("Login failed. Please try again.");
-        }
-      } else {
-        console.log(response.data.message);
-        toast.error("Invalid User Credentials");
-      }
+       if (response.data.success === true) {
+  const accessToken = response.data.data?.accessToken;
+
+  if (accessToken) {
+    dispatch(setToken({ accessToken }));
+    console.log('Access Token:', accessToken);
+    toast.success("Login Success");
+    navigate("/");
+  } else {
+    console.error('Access Token not found in the response:', response.data);
+    toast.error("Login failed. Please try again.");
+  }
+} else {
+  console.log(response.data.message);
+  toast.error("Invalid User Credentials");
+}
+
+      
     } catch (error) {
       if (error.response && error.response.status === 401) {
         toast.error("Invalid User Credentials");
